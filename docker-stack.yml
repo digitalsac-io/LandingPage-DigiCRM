@@ -1,0 +1,55 @@
+# Stack para Docker Swarm (Portainer) com Traefik já instalado.
+#
+# Antes de subir:
+#   1. Imagem pública no Docker Hub: digitalsac/landing:latest (workflow
+#      ".github/workflows/deploy_landing_dockerhub.yml" publica; o Swarm baixa sozinho).
+#      Alternativa offline: docker build -t digitalsac/landing:latest . no nó.
+#   2. Ajuste abaixo: dominio (Host), nome da rede do Traefik, certresolver e os envs.
+#   3. IMPORTANTE: o app usa SQLite → mantenha replicas: 1 e a constraint de nó fixo
+#      (os volumes são locais ao nó; mover de nó perde os dados).
+#
+# Redes comuns conforme a instalação do Traefik: network_public | traefik-public | traefik_public
+# Certresolver comum: letsencryptresolver | le | letsencrypt
+
+version: "3.8"
+
+services:
+  landing:
+    image: digitalsac/landing:latest
+    networks:
+      - network_public
+    environment:
+      DATABASE_URL: "file:/app/data/landing.db"
+      SESSION_SECRET: "TROQUE-por-um-segredo-longo-aleatorio"
+      ADMIN_EMAIL: "admin@suaempresa.com.br"
+      ADMIN_PASSWORD: "TROQUE-esta-senha"
+      UPLOAD_DIR: "/app/uploads"
+    volumes:
+      - landing_data:/app/data
+      - landing_uploads:/app/uploads
+    deploy:
+      mode: replicated
+      replicas: 1 # SQLite: NUNCA aumente
+      placement:
+        constraints:
+          - node.role == manager # ajuste p/ fixar no nó desejado (ex.: node.hostname == worker1)
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.landing.rule=Host(`landing.suaempresa.com.br`)
+        - traefik.http.routers.landing.entrypoints=websecure
+        - traefik.http.routers.landing.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.landing.service=landing
+        - traefik.http.services.landing.loadbalancer.server.port=3005
+        # redireciona http -> https (se o entrypoint web não fizer isso globalmente)
+        - traefik.http.routers.landing-http.rule=Host(`landing.suaempresa.com.br`)
+        - traefik.http.routers.landing-http.entrypoints=web
+        - traefik.http.routers.landing-http.middlewares=landing-redirect
+        - traefik.http.middlewares.landing-redirect.redirectscheme.scheme=https
+
+networks:
+  network_public:
+    external: true
+
+volumes:
+  landing_data:
+  landing_uploads:

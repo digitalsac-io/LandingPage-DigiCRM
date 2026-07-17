@@ -1,0 +1,131 @@
+{
+  "landing": {
+    "nav": {
+      "features": "Funciones",
+      "plans": "Planes",
+      "faq": "Preguntas",
+      "signup": "Crear cuenta",
+      "login": "Iniciar sesión"
+    },
+    "hero": {
+      "title": "Atención inteligente para tu empresa",
+      "subtitle": "Centraliza WhatsApp, campañas, IA y tu equipo en una sola plataforma.",
+      "cta": "Empezar ahora",
+      "ctaSecondary": "Ver planes"
+    },
+    "features": {
+      "title": "Todo lo que tu operación necesita",
+      "subtitle": "Módulos potentes que crecen con tu negocio.",
+      "omnichannelTitle": "Omnichannel",
+      "omnichannelDesc": "WhatsApp, WABA, SMS y webchat en un solo lugar.",
+      "campaignsTitle": "Campañas",
+      "campaignsDesc": "Envía campañas masivas segmentadas con reportes detallados.",
+      "aiTitle": "Inteligencia Artificial",
+      "aiDesc": "Respuestas automáticas y copilotos para el equipo.",
+      "kanbanTitle": "Kanban",
+      "kanbanDesc": "Embudo visual de atenciones y oportunidades.",
+      "schedulerTitle": "Agendamientos",
+      "schedulerDesc": "Mensajes y seguimientos programados.",
+      "callsTitle": "Llamadas",
+      "callsDesc": "Llamadas y campañas de voz integradas."
+    },
+    "plans": {
+      "title": "Planes y precios",
+      "subtitle": "Elige el plan ideal — sin sorpresas.",
+      "users": "usuarios",
+      "channels": "conexiones",
+      "storage": "GB de espacio",
+      "contacts": "contactos",
+      "perMonth": "/mes",
+      "trialBadge": "{days} días gratis",
+      "modulesIncluded": "Módulos incluidos",
+      "select": "Suscribirse",
+      "featured": "Más popular",
+      "approx": "aprox.",
+      "loadError": "No se pudieron cargar los planes. Inténtalo de nuevo en un momento.",
+      "moduleNames": {
+        "ia": "IA",
+        "campaign": "Campañas",
+        "campaignWaba": "Campañas WABA",
+        "campaignSms": "Campañas SMS",
+        "typebot": "Typebot",
+        "scheduler": "Agendamientos",
+        "kanban": "Kanban",
+        "digicalls": "Llamadas",
+        "internalChat": "Chat interno"
+      },
+      "recurrences": {
+        "SEMANAL": "semanal",
+        "QUIZENAL": "quincenal",
+        "MENSAL": "mensual",
+        "TRIMESTRAL": "trimestral",
+        "SEMESTRAL": "semestral",
+        "ANUAL": "anual"
+      }
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "q1": "¿Necesito tarjeta de crédito para probar?",
+      "a1": "No. Los planes con período de prueba dan acceso inmediato sin tarjeta.",
+      "q2": "¿Puedo cambiar de plan después?",
+      "a2": "Sí, el upgrade se realiza en cualquier momento y el valor se ajusta en la factura.",
+      "q3": "¿Mis datos están seguros?",
+      "a3": "Sí. Infraestructura dedicada, copias de seguridad y cifrado en tránsito."
+    },
+    "cta": {
+      "title": "¿Listo para transformar tu atención al cliente?",
+      "subtitle": "Crea tu cuenta en menos de 2 minutos.",
+      "button": "Crear mi cuenta"
+    },
+    "footer": {
+      "rights": "Todos los derechos reservados.",
+      "terms": "Términos de uso"
+    },
+    "whats": {
+      "title": "Habla con nosotros por WhatsApp",
+      "name": "Tu nombre",
+      "subject": "Asunto",
+      "start": "Iniciar conversación",
+      "greeting": "¡Hola! Mi nombre es",
+      "subjectLabel": "Asunto",
+      "origin": "Origen"
+    },
+    "signup": {
+      "title": "Crear tu cuenta",
+      "choosePlan": "Elige tu plan",
+      "yourData": "Tus datos",
+      "name": "Nombre de la empresa",
+      "email": "Correo electrónico",
+      "phone": "WhatsApp/Teléfono",
+      "document": "RFC o ID fiscal",
+      "password": "Contraseña",
+      "passwordHint": "Mínimo 8 caracteres, con letras y números",
+      "acceptTerms": "He leído y acepto los términos de uso",
+      "submit": "Crear cuenta",
+      "submitting": "Enviando...",
+      "successTitle": "¡Cuenta creada con éxito!",
+      "successText": "Enviamos un correo con los detalles de acceso. Ya puedes ingresar a la plataforma.",
+      "goToApp": "Acceder a la plataforma",
+      "backHome": "Volver al inicio",
+      "passwordConfirm": "Confirma la contraseña"
+    },
+    "errors": {
+      "rate_limited": "Demasiados intentos desde esta dirección. Espera e inténtalo de nuevo.",
+      "captcha_failed": "Falló la verificación anti-robot. Inténtalo de nuevo.",
+      "too_fast": "Envío demasiado rápido. Verifica los datos y reenvía.",
+      "invalid_plan": "Selecciona un plan.",
+      "invalid_name": "Ingresa el nombre de la empresa.",
+      "invalid_email": "Correo electrónico inválido.",
+      "invalid_phone": "Teléfono inválido.",
+      "invalid_document": "ID fiscal inválido.",
+      "invalid_password": "Contraseña débil: usa 8+ caracteres con letras y números.",
+      "disposable_email": "Los correos temporales no son aceptados.",
+      "email_exists": "Este correo ya tiene registro.",
+      "document_exists": "Este ID fiscal ya tiene registro.",
+      "backend_down": "Sistema temporalmente no disponible. Inténtalo en un momento.",
+      "not_configured": "El registro aún no está configurado en este sitio.",
+      "generic": "No se pudo completar la acción. Inténtalo de nuevo.",
+      "password_mismatch": "Las contraseñas no coinciden."
+    }
+  }
+}

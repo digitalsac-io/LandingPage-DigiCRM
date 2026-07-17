@@ -1,0 +1,16 @@
+services:
+  landing:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+    environment:
+      DATABASE_URL: "file:./data/landing.db"
+      SESSION_SECRET: "${SESSION_SECRET:?defina SESSION_SECRET no .env}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:?defina ADMIN_EMAIL no .env}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:?defina ADMIN_PASSWORD no .env}"
+      UPLOAD_DIR: "/app/uploads"
+      HOSTNAME: "0.0.0.0"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads

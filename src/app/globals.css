@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --brand: #4f46e5;
+  --brand-dark: #3f38b7;
+  --accent-c: #06b6d4;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* navbar sticky tem h-16: âncoras param abaixo dela */
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-accent: var(--accent-c);
+}

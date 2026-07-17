@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model SiteConfig {
+  id                 Int      @id @default(1)
+  siteUrl            String   @default("")
+  backendUrl         String   @default("")
+  appUrl             String   @default("")
+  termsUrl           String   @default("")
+  termsHtml          String   @default("")
+  logoLight          String   @default("")
+  logoDark           String   @default("")
+  favicon            String   @default("")
+  ogImage            String   @default("")
+  primaryColor       String   @default("#4f46e5")
+  accentColor        String   @default("#06b6d4")
+  captchaProvider    String   @default("none") // none | hcaptcha | turnstile
+  captchaSiteKey     String   @default("")
+  captchaSecret      String   @default("")
+  cpfApiKey          String   @default("")
+  signupPerHour      Int      @default(5)
+  signupPerDay       Int      @default(20)
+  blockDisposable    Boolean  @default(true)
+  currencyConversion Boolean  @default(false)
+  featuredPlanId     String   @default("")
+  plansColumns       Int      @default(3)
+  whatsapp           String   @default("")
+  whatsSubjects      String   @default("")
+  customScripts      String   @default("")
+  heroImage          String   @default("")
+  sectionsJson       String   @default("{}") // {"features":true,"plans":true,"faq":true,"cta":true}
+  socialJson         String   @default("{}") // {"instagram":"","facebook":"","linkedin":"","youtube":"","x":""}
+  seoJson            String   @default("{}") // {"pt-BR":{"title":"","description":""},...}
+  updatedAt          DateTime @updatedAt
+}
+
+model SectionText {
+  id      Int    @id @default(autoincrement())
+  section String
+  locale  String
+  key     String
+  value   String
+
+  @@unique([section, locale, key])
+}
+
+model FaqItem {
+  id       Int    @id @default(autoincrement())
+  locale   String
+  question String
+  answer   String
+  order    Int    @default(0)
+}
+
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  totpSecret   String    @default("")
+  totpEnabled  Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  sessions     Session[]
+}
+
+model Session {
+  token     String    @id
+  userId    Int
+  expiresAt DateTime
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SignupAttempt {
+  id        Int      @id @default(autoincrement())
+  ip        String
+  email     String   @default("")
+  result    String   // success | blocked_rate | blocked_captcha | blocked_honeypot | blocked_too_fast | blocked_disposable | invalid | backend_error
+  createdAt DateTime @default(now())
+
+  @@index([ip, createdAt])
+}

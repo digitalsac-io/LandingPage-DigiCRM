@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "AdminUser" ADD COLUMN "totpSecret" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "AdminUser" ADD COLUMN "totpEnabled" BOOLEAN NOT NULL DEFAULT false;
