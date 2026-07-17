@@ -36,6 +36,7 @@ model SiteConfig {
   sectionsJson       String   @default("{}") // {"features":true,"plans":true,"faq":true,"cta":true}
   socialJson         String   @default("{}") // {"instagram":"","facebook":"","linkedin":"","youtube":"","x":""}
   seoJson            String   @default("{}") // {"pt-BR":{"title":"","description":""},...}
+  planExtrasJson     String   @default("{}") // {"planId":["line1","-negative line"]}
   updatedAt          DateTime @updatedAt
 }
 

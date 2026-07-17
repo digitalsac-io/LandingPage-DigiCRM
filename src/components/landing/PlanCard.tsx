@@ -1,11 +1,12 @@
 import { Link } from "@/i18n/navigation";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Button, Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 export type PlanCardData = {
   id: string; name: string; priceLabel: string; approxLabel?: string; recurrenceLabel: string;
   trialLabel?: string; featured: boolean; lines: string[]; moduleLabels: string[];
+  extraItems: Array<{ text: string; negative: boolean }>;
 };
 
 export function PlanCard({ plan, href, t, selectable = false, compact = false }: {
@@ -35,6 +36,14 @@ export function PlanCard({ plan, href, t, selectable = false, compact = false }:
       <ul className={cn("mt-6 space-y-2", compact ? "text-xs" : "text-sm")}>
         {plan.lines.map(line => (
           <li key={line} className="flex items-center gap-2"><Check size={16} className="text-brand" />{line}</li>
+        ))}
+        {plan.extraItems.map(item => (
+          <li key={item.text} className="flex items-center gap-2">
+            {item.negative
+              ? <X size={16} className="text-zinc-400" />
+              : <Check size={16} className="text-brand" />}
+            <span className={item.negative ? "text-zinc-500" : undefined}>{item.text}</span>
+          </li>
         ))}
       </ul>
       {plan.moduleLabels.length > 0 && (

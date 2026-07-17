@@ -128,6 +128,13 @@ export function SignupForm({ cards, preselected, captcha, appUrl, termsHref, car
                     )}
                   </div>
                   <div className="mt-1 truncate text-xs text-zinc-500">{card.lines.join(" · ")}</div>
+                  {card.extraItems.length > 0 && (
+                    <div className="mt-0.5 flex flex-wrap gap-x-1.5 text-xs text-zinc-500">
+                      {card.extraItems.filter(x => !x.negative).map(x => x.text).join(" · ")}
+                      {card.extraItems.some(x => x.negative) && card.extraItems.some(x => !x.negative) && " · "}
+                      {card.extraItems.filter(x => x.negative).map(x => `✕ ${x.text}`).join(" · ")}
+                    </div>
+                  )}
                   {card.moduleLabels.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {card.moduleLabels.map(m => (

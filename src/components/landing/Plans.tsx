@@ -39,6 +39,10 @@ export async function Plans({ locale }: { locale: string }) {
       ...(p.contractedSpace ? [`${p.contractedSpace} ${t("storage")}`] : []),
       ...(p.maxContacts ? [`${p.maxContacts.toLocaleString(locale)} ${t("contacts")}`] : [])
     ];
+    const extraItems = (config.planExtras[p.id] ?? []).map(line => ({
+      negative: line.startsWith("-"),
+      text: line.replace(/^-+\s*/, "")
+    }));
     const recurrenceKey = `recurrences.${p.recurrence}`;
     return {
       id: p.id, name: p.name, priceLabel: brl, approxLabel,
@@ -46,6 +50,7 @@ export async function Plans({ locale }: { locale: string }) {
       trialLabel: p.trial ? t("trialBadge", { days: p.trialDays }) : undefined,
       featured: config.featuredPlanId === p.id,
       lines,
+      extraItems,
       moduleLabels: p.modules.map(m => t.has(`moduleNames.${m}` as never) ? t(`moduleNames.${m}` as never) : m)
     };
   });

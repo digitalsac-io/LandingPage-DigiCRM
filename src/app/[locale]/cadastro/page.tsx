@@ -50,6 +50,10 @@ export default async function Cadastro({ params, searchParams }: {
       `${p.users} ${tPlans("users")}`,
       `${p.channels} ${tPlans("channels")}`
     ];
+    const extraItems = (config.planExtras[p.id] ?? []).map(line => ({
+      negative: line.startsWith("-"),
+      text: line.replace(/^-+\s*/, "")
+    }));
     return {
       id: p.id,
       name: p.name,
@@ -59,6 +63,7 @@ export default async function Cadastro({ params, searchParams }: {
       trialLabel: p.trial ? tPlans("trialBadge", { days: p.trialDays }) : undefined,
       featured: config.featuredPlanId === p.id,
       lines,
+      extraItems,
       moduleLabels: p.modules.map(m => tPlans.has(`moduleNames.${m}` as never) ? tPlans(`moduleNames.${m}` as never) : m)
     };
   });

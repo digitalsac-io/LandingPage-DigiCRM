@@ -17,6 +17,7 @@ type Config = Record<string, unknown> & {
   sections: Record<string, boolean>;
   social: Record<string, string>;
   seo: Record<string, { title: string; description: string }>;
+  planExtras: Record<string, string[]>;
 };
 
 // ─── UploadInput ────────────────────────────────────────────────────────────
@@ -390,6 +391,14 @@ function PlansPanel({ config, onSave }: { config: Config; onSave: (p: Record<str
   const [saving, setSaving] = useState(false);
   const [plans, setPlans] = useState<Array<{ id: string; name: string; price: number }>>([]);
   const [plansError, setPlansError] = useState(false);
+  const [extras, setExtras] = useState<Record<string, string>>(() => {
+    const init: Record<string, string> = {};
+    const saved = (config.planExtras ?? {}) as Record<string, string[]>;
+    for (const [id, lines] of Object.entries(saved)) {
+      init[id] = lines.join("\n");
+    }
+    return init;
+  });
 
   useEffect(() => {
     fetch("/api/public/plans")
@@ -400,7 +409,13 @@ function PlansPanel({ config, onSave }: { config: Config; onSave: (p: Record<str
 
   async function save() {
     setSaving(true);
-    await onSave({ featuredPlanId, currencyConversion, plansColumns: Number(plansColumns) });
+    const planExtras: Record<string, string[]> = {};
+    for (const plan of plans) {
+      const raw = extras[plan.id] ?? "";
+      const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
+      if (lines.length > 0) planExtras[plan.id] = lines;
+    }
+    await onSave({ featuredPlanId, currencyConversion, plansColumns: Number(plansColumns), planExtras });
     setSaving(false);
   }
 
@@ -443,6 +458,28 @@ function PlansPanel({ config, onSave }: { config: Config; onSave: (p: Record<str
         </select>
         <p className="mt-1 text-xs text-zinc-500">Com 4 por linha os cards ficam compactos automaticamente.</p>
       </div>
+      {plans.length > 0 && (
+        <div className="mb-4">
+          <Label>Itens extras por plano</Label>
+          <p className="mb-3 text-xs text-zinc-500">
+            Um item por linha. Comece com &quot;-&quot; para item negativo (ex.: -Não inclui backup).
+          </p>
+          <div className="space-y-3">
+            {plans.map(p => (
+              <div key={p.id}>
+                <Label className="text-xs text-zinc-600">{p.name}</Label>
+                <textarea
+                  rows={3}
+                  value={extras[p.id] ?? ""}
+                  onChange={e => setExtras(prev => ({ ...prev, [p.id]: e.target.value }))}
+                  className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20 dark:border-zinc-700 dark:bg-zinc-900"
+                  placeholder={"10 canais DigiCalls\n1 Canal DigiAPI\n-Não inclui Backup"}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="mb-6">
         <Toggle
           checked={currencyConversion}
