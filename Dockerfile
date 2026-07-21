@@ -7,6 +7,8 @@ RUN npm install
 
 FROM node:22-slim AS build
 WORKDIR /app
+# Prisma needs OpenSSL to detect the query-engine libssl at build (migrate/generate)
+RUN apt-get update -y && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV DATABASE_URL="file:./data/landing.db"
@@ -15,6 +17,8 @@ RUN mkdir -p data && npx prisma generate && npx prisma migrate deploy && npm run
 
 FROM node:22-slim
 WORKDIR /app
+# Prisma's schema/migrate engine needs OpenSSL at runtime (entrypoint runs `prisma migrate deploy`)
+RUN apt-get update -y && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production PORT=3005 HOSTNAME=0.0.0.0
 # standalone Next output
 COPY --from=build /app/.next/standalone ./
@@ -22,6 +26,9 @@ COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
 # prisma migrations + schema (needed for migrate deploy at runtime)
 COPY --from=build /app/prisma ./prisma
+# prisma.config.ts holds the datasource url (schema.prisma has no `url`); the Prisma CLI
+# needs it at runtime or `migrate deploy` fails with "datasource.url property is required".
+COPY --from=build /app/prisma.config.ts ./
 # Copy ALL node_modules needed by the entrypoint (prisma CLI + adapter + bcryptjs + their deep deps).
 # Copying the full node_modules is the safest approach here because prisma CLI has
 # deep transitive deps (effect, c12, deepmerge-ts, empathic, …) that are hard to enumerate.

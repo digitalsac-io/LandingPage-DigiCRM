@@ -1,0 +1,17 @@
+services:
+  landing:
+    image: digitalsac/landing:latest
+    restart: always
+    ports:
+      # publica apenas em 127.0.0.1 -> acesso externo passa pelo proxy HTTPS do aaPanel
+      - "127.0.0.1:${WEB_PORT}:3005"
+    environment:
+      DATABASE_URL: "file:/app/data/landing.db"
+      SESSION_SECRET: ${SESSION_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      UPLOAD_DIR: "/app/uploads"
+      HOSTNAME: "0.0.0.0"
+    volumes:
+      - ${APP_PATH}/data:/app/data
+      - ${APP_PATH}/uploads:/app/uploads

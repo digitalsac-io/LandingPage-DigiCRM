@@ -1,0 +1,20 @@
+services:
+  landing:
+    # Builda a imagem JA COM O FIX a partir do codigo-fonte local (pasta ./landing-src),
+    # sem depender do Docker Hub. Use esta variante para subir funcionando agora.
+    build:
+      context: ./landing-src
+    image: digitalsac/landing:fix-local
+    restart: always
+    ports:
+      - "127.0.0.1:${WEB_PORT}:3005"
+    environment:
+      DATABASE_URL: "file:/app/data/landing.db"
+      SESSION_SECRET: ${SESSION_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      UPLOAD_DIR: "/app/uploads"
+      HOSTNAME: "0.0.0.0"
+    volumes:
+      - ${APP_PATH}/data:/app/data
+      - ${APP_PATH}/uploads:/app/uploads
