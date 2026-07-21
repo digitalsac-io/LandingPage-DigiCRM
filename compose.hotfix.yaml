@@ -1,0 +1,38 @@
+services:
+  landing:
+    image: digitalsac/landing:latest
+    restart: always
+    ports:
+      # publica so em 127.0.0.1 -> acesso externo passa pelo proxy HTTPS do aaPanel
+      - "127.0.0.1:${WEB_PORT}:3005"
+    environment:
+      DATABASE_URL: "file:/app/data/landing.db"
+      SESSION_SECRET: ${SESSION_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      # HOTFIX 2 (logo nao aparecia): a imagem publica atual nao tem rota que sirva
+      # /uploads. Gravando os uploads dentro de public/uploads, o Next os serve como
+      # estaticos. A mesma pasta do host (${APP_PATH}/uploads) e montada aqui, entao
+      # o logo que voce ja subiu passa a aparecer sem precisar reenviar.
+      UPLOAD_DIR: "/app/public/uploads"
+      HOSTNAME: "0.0.0.0"
+    volumes:
+      - ${APP_PATH}/data:/app/data
+      - ${APP_PATH}/uploads:/app/public/uploads
+    # HOTFIX 1 (container reiniciando): a imagem publica atual nao inclui o
+    # prisma.config.ts, entao 'prisma migrate deploy' falha com
+    # "datasource.url property is required". Recriamos o arquivo no boot e so
+    # entao chamamos o entrypoint original.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        cat > /app/prisma.config.ts <<'PRISMA_EOF'
+        import "dotenv/config";
+        import path from "path";
+        import { defineConfig } from "prisma/config";
+        const databaseUrl =
+          process.env.DATABASE_URL ?? "file:" + path.join(process.cwd(), "data", "landing.db");
+        export default defineConfig({ datasource: { url: databaseUrl } });
+        PRISMA_EOF
+        exec ./docker-entrypoint.sh
